@@ -1,6 +1,5 @@
 {
   "name": "EventSubscribtion",
   "render_readme": true,
-  "iot_class": "assumed_state",
-  "domains": ["eventsubscription"]
+  "iot_class": "assumed_state"
 }
