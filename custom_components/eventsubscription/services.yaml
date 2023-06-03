@@ -1,0 +1,65 @@
+register:
+  name: Register
+  description: Register a eventsubscription.
+  fields:
+    eventname:
+      name: Eventname
+      description: Name of the event
+      required: true
+      example: custom_event
+      selector:
+        text:
+    targetPerson:
+      name: Target
+      description: Target
+      required: false
+      selector:
+        entity:
+          multiple: true
+          filter:
+            - domain: person
+    targetText:
+      name: TargetText
+      description: TargetText
+      required: false
+      example: Excuting user {% for state in states.person -%}{% if state.attributes.user_id == trigger.to_state.context.user_id %}{{state.attributes.friendly_name}}{% endif %}{%- endfor %}
+      selector:
+        template:
+    registermessage:
+      name: RegisterMessage
+      description: Message for registering
+      required: false
+      example: Event registered
+      selector:
+        text:
+    completemessage:
+      name: CompleteMessage
+      description: Message for completing
+      required: false
+      example: Event completed
+      selector:
+        text:
+    deleteaftercompletion:
+      name: Delete
+      description: Delete current Registration to this event
+      required: true
+      selector:
+        boolean:
+
+complete:
+  name: Complete
+  description: Complete a eventsubscription.
+  fields:
+    eventname:
+      name: Eventname
+      description: Name of the event
+      required: true
+      example: custom_event
+      selector:
+        text:
+    flushregistration:
+      name: Registration flush
+      description: Flush all Registrations to this event
+      required: true
+      selector:
+        boolean:

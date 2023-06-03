@@ -1,0 +1,16 @@
+{
+  "domain": "eventsubscription",
+  "name": "eventsubscription",
+  "codeowners": [
+    "@tabisch"
+  ],
+  "config_flow": true,
+  "dependencies": [],
+  "documentation": "https://www.home-assistant.io/integrations/eventsubscription",
+  "homekit": {},
+  "integration_type": "helper",
+  "iot_class": "assumed_state",
+  "requirements": [],
+  "ssdp": [],
+  "zeroconf": []
+}
