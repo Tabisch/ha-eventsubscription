@@ -1,0 +1,27 @@
+alias: NotifyUser
+description: ""
+trigger:
+  - platform: event
+    event_type: eventsubscription_register
+  - platform: event
+    event_type: eventsubscription_complete
+condition: []
+action:
+  - if:
+      - condition: template
+        value_template: "{{ trigger.event.data.targetuser == 'FriendlyNameUser1' }}"
+    then:
+      - service: notify.mobile_app_phoneUser1
+        data:
+          message: "{{ trigger.event.data.message }}"
+    alias: Tobias benachrichtigen
+  - if:
+      - condition: template
+        value_template: "{{ trigger.event.data.targetuser == 'FriendlyNameUser2' }}"
+    then:
+      - service: notify.mobile_app_phoneUser2
+        data:
+          message: "{{ trigger.event.data.message }}"
+    alias: Hermann benachrichtigen
+mode: parallel
+max: 50

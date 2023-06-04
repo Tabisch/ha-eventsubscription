@@ -22,14 +22,13 @@ register:
       name: TargetText
       description: TargetText
       required: false
-      example: Excuting user {% for state in states.person -%}{% if state.attributes.user_id == trigger.to_state.context.user_id %}{{state.attributes.friendly_name}}{% endif %}{%- endfor %}
       selector:
         template:
     registermessage:
       name: RegisterMessage
       description: Message for registering
       required: false
-      example: Event registered
+      example: EventSubscription registered
       selector:
         text:
     completemessage:
@@ -37,6 +36,13 @@ register:
       description: Message for completing
       required: false
       example: Event completed
+      selector:
+        text:
+    unregistermessage:
+      name: UnregisterMessage
+      description: Message for unregistering
+      required: false
+      example: EventSubscription unregistered
       selector:
         text:
     deleteaftercompletion:
@@ -63,3 +69,34 @@ complete:
       required: true
       selector:
         boolean:
+
+unregister:
+  name: Unregister
+  description: Unregister a eventsubscription.
+  fields:
+    eventname:
+      name: Eventname
+      description: Name of the event
+      required: true
+      example: custom_event
+      selector:
+        text:
+    targetPerson:
+      name: Target
+      description: Target
+      required: false
+      selector:
+        entity:
+          multiple: true
+          filter:
+            - domain: person
+    targetText:
+      name: TargetText
+      description: TargetText
+      required: false
+      selector:
+        template:
+
+reset:
+  name: Reset
+  description: Delete all notification registrations
