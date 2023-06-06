@@ -14,7 +14,7 @@ action:
       - service: notify.mobile_app_phoneUser1
         data:
           message: "{{ trigger.event.data.message }}"
-    alias: Tobias benachrichtigen
+    alias: Notify user1
   - if:
       - condition: template
         value_template: "{{ trigger.event.data.targetuser == 'FriendlyNameUser2' }}"
@@ -22,6 +22,6 @@ action:
       - service: notify.mobile_app_phoneUser2
         data:
           message: "{{ trigger.event.data.message }}"
-    alias: Hermann benachrichtigen
+    alias: Notify user2
 mode: parallel
 max: 50
