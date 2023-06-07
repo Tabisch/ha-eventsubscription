@@ -1,0 +1,15 @@
+{
+  "name": "ha-eventsubscription Dev",
+  "image": "homeassistant/home-assistant",
+  "containerEnv": { "DEVCONTAINER": "1" },
+  "appPort": ["8123:8123"],
+  "extensions": [
+    "ms-python.vscode-pylance",
+    "visualstudioexptteam.vscodeintellicode",
+    "redhat.vscode-yaml",
+    "esbenp.prettier-vscode",
+    "GitHub.vscode-pull-request-github"
+  ],
+  "workspaceMount": "source=${localWorkspaceFolder}/custom_components/eventsubscription,target=/test,type=bind",
+  "workspaceFolder": "/"
+}
