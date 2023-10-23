@@ -7,6 +7,7 @@ import time
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import Platform, ATTR_NAME, ATTR_DEFAULT_NAME
 from homeassistant.core import HomeAssistant
+from homeassistant.helpers.json import save_json, 
 
 from .const import (
     DOMAIN,
@@ -22,11 +23,15 @@ from .const import (
 
 _LOGGER = logging.getLogger(__name__)
 
+PERSISTENCE = ".eventsubscription.json"
+
 state = {}
 
 
 def setup(hass, config):
     _LOGGER.info(f"The {__name__} component is ready!")
+
+    state = json.loads(hass.config.path(PERSISTENCE))
 
     def handle_register(call):
         """Handle the service call."""
@@ -76,6 +81,8 @@ def setup(hass, config):
                     },
                 )
 
+        save_json(hass.config.path(PERSISTENCE), state)
+
     def handle_complete(call):
         """Handle the service call."""
         eventname = call.data.get(ATTR_EVENTNAME)
@@ -101,6 +108,9 @@ def setup(hass, config):
 
         if flushregistration:
             del state[eventname]
+
+        save_json(hass.config.path(PERSISTENCE), state)
+        
 
     def handle_unregister(call):
         """Handle the service call."""
@@ -142,6 +152,8 @@ def setup(hass, config):
 
                 del state[eventname][user]
 
+        save_json(hass.config.path(PERSISTENCE), state)
+
     def handle_reset(call):
         """Reset all notifications."""
         state = {}
@@ -149,6 +161,8 @@ def setup(hass, config):
         hass.bus.fire(
             "eventsubscription_reset"
         )
+
+        save_json(hass.config.path(PERSISTENCE), state)
 
     hass.services.register(DOMAIN, "complete", handle_complete)
     hass.services.register(DOMAIN, "register", handle_register)
