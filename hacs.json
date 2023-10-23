@@ -1,4 +1,6 @@
 {
   "name": "EventSubscribtion",
-  "domains": ["eventsubscription"]
+  "domains": ["eventsubscription"],
+  "hide_default_branch": true,
+  "iot_class": "local"
 }
