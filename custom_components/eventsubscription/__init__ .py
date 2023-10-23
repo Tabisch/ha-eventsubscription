@@ -7,7 +7,7 @@ import time
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import Platform, ATTR_NAME, ATTR_DEFAULT_NAME
 from homeassistant.core import HomeAssistant
-from homeassistant.helpers.json import save_json, 
+from homeassistant.helpers.json import save_json
 
 from .const import (
     DOMAIN,
@@ -31,7 +31,11 @@ state = {}
 def setup(hass, config):
     _LOGGER.info(f"The {__name__} component is ready!")
 
-    state = json.loads(hass.config.path(PERSISTENCE))
+    f = open(hass.config.path(PERSISTENCE))
+
+    state = json.loads(f)
+
+    f.close()
 
     def handle_register(call):
         """Handle the service call."""
