@@ -1,4 +1,4 @@
-# Event Subscribtion
+# Event Subscription
 
 Automation Template for Subscribing a User that has pressed a button or scanned a nfc tag \
 Refernce automationTemplateCurrentUser file to get a yaml that will always return the name of the user executing the automation
