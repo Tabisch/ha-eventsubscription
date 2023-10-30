@@ -56,7 +56,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
 
         f.close()
 
-    def handle_register(call):
+    async def handle_register(call):
         """Handle the service call."""
         eventname = call.data.get(ATTR_EVENTNAME)
         registermessage = call.data.get(ATTR_REGISTERMESSAGE)
@@ -106,7 +106,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
 
         save_json(hass.config.path(PERSISTENCE), state)
 
-    def handle_complete(call):
+    async def handle_complete(call):
         """Handle the service call."""
         eventname = call.data.get(ATTR_EVENTNAME)
         flushregistration = call.data.get(ATTR_FLUSHREGISTRATION)
@@ -135,7 +135,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
         save_json(hass.config.path(PERSISTENCE), state)
         
 
-    def handle_unregister(call):
+    async def handle_unregister(call):
         """Handle the service call."""
         eventname = call.data.get(ATTR_EVENTNAME)
         targetperson = call.data.get(ATTR_TARGETPERSON)
@@ -177,7 +177,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
 
         save_json(hass.config.path(PERSISTENCE), state)
 
-    def handle_reset(call):
+    async def handle_reset(call):
         """Reset all notifications."""
         state = {}
 
