@@ -5,7 +5,9 @@ import json
 import time
 import os
 
+from homeassistant import config_entries
 from homeassistant.config_entries import ConfigEntry
+from homeassistant.helpers.typing import ConfigType
 from homeassistant.const import Platform, ATTR_NAME, ATTR_DEFAULT_NAME
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.json import save_json
@@ -28,8 +30,21 @@ PERSISTENCE = ".eventsubscription.json"
 
 state = {}
 
+async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
+    """Initialize the shopping list."""
 
-def setup(hass, config):
+    if DOMAIN not in config:
+        return True
+
+    hass.async_create_task(
+        hass.config_entries.flow.async_init(
+            DOMAIN, context={"source": config_entries.SOURCE_IMPORT}
+        )
+    )
+
+    return True
+
+async def async_setup_entry(hass, config: ConfigEntry):
     _LOGGER.info(f"The {__name__} component is ready!")
 
     if os.path.exists(PERSISTENCE):

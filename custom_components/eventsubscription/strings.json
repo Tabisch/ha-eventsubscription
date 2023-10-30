@@ -4,7 +4,7 @@
     "step": {
       "user": {
         "title": "[%key:component::eventsubscription::title%]",
-        "description": "Do you want to configure the EventSubscription list?"
+        "description": "Do you want to configure the EventSubscription?"
       }
     },
     "abort": {
