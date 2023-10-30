@@ -30,22 +30,15 @@ PERSISTENCE = ".eventsubscription.json"
 
 state = {}
 
-async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
-    """Initialize the shopping list."""
-
-    if DOMAIN not in config:
-        return True
-
-    hass.async_create_task(
-        hass.config_entries.flow.async_init(
-            DOMAIN, context={"source": config_entries.SOURCE_IMPORT}
-        )
-    )
-
+async def async_setup(hass, config):
+    hass.data.setdefault(DOMAIN, {})
     return True
 
-async def async_setup_entry(hass, config: ConfigEntry):
+async def async_setup_entry(hass, entry: ConfigEntry):
     _LOGGER.info(f"The {__name__} component is ready!")
+
+    hass.data.setdefault(DOMAIN, {})
+    hass.data[DOMAIN][entry.entry_id] = entry.data
 
     if os.path.exists(PERSISTENCE):
         f = open(hass.config.path(PERSISTENCE))
