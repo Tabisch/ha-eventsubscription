@@ -8,7 +8,7 @@ import os
 from homeassistant import config_entries
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.helpers.typing import ConfigType
-from homeassistant.const import Platform, ATTR_NAME, ATTR_DEFAULT_NAME
+from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.json import save_json
 
@@ -26,19 +26,25 @@ from .const import (
 
 _LOGGER = logging.getLogger(__name__)
 
+PLATFORMS = [Platform.TODO]
 PERSISTENCE = ".eventsubscription.json"
 
 state = {}
 
 async def async_setup(hass, config):
-    hass.data.setdefault(DOMAIN, {})
+    if DOMAIN not in config:
+        return True
+    
+    hass.async_create_task(
+        hass.config_entries.flow.async_init(
+            DOMAIN, context={"source": config_entries.SOURCE_IMPORT}
+        )
+    )
+
     return True
 
-async def async_setup_entry(hass, entry: ConfigEntry):
+async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
     _LOGGER.info(f"The {__name__} component is ready!")
-
-    hass.data.setdefault(DOMAIN, {})
-    hass.data[DOMAIN][entry.entry_id] = entry.data
 
     if os.path.exists(PERSISTENCE):
         f = open(hass.config.path(PERSISTENCE))
@@ -184,4 +190,7 @@ async def async_setup_entry(hass, entry: ConfigEntry):
     hass.services.register(DOMAIN, "reset", handle_reset)
 
     # Return boolean to indicate that initialization was successful.
+
+    await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
+
     return True
