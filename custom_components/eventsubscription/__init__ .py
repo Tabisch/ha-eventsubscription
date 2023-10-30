@@ -5,9 +5,10 @@ import json
 import time
 import os
 
+import voluptuous as vol
+
 from homeassistant import config_entries
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.helpers.typing import ConfigType
 from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.json import save_json
@@ -25,6 +26,8 @@ from .const import (
 )
 
 _LOGGER = logging.getLogger(__name__)
+
+CONFIG_SCHEMA = vol.Schema({DOMAIN: {}}, extra=vol.ALLOW_EXTRA)
 
 PLATFORMS = [Platform.TODO]
 PERSISTENCE = ".eventsubscription.json"
