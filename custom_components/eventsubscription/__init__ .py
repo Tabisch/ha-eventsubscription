@@ -3,6 +3,7 @@ from __future__ import annotations
 import logging
 import json
 import time
+import os
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import Platform, ATTR_NAME, ATTR_DEFAULT_NAME
@@ -31,11 +32,12 @@ state = {}
 def setup(hass, config):
     _LOGGER.info(f"The {__name__} component is ready!")
 
-    f = open(hass.config.path(PERSISTENCE))
+    if os.path.exists(PERSISTENCE):
+        f = open(hass.config.path(PERSISTENCE))
 
-    state = json.loads(f)
+        state = json.loads(f)
 
-    f.close()
+        f.close()
 
     def handle_register(call):
         """Handle the service call."""
