@@ -29,24 +29,11 @@ _LOGGER = logging.getLogger(__name__)
 
 CONFIG_SCHEMA = vol.Schema({DOMAIN: {}}, extra=vol.ALLOW_EXTRA)
 
-PLATFORMS = [Platform.TODO]
 PERSISTENCE = ".eventsubscription.json"
 
 state = {}
 
 async def async_setup(hass, config):
-    if DOMAIN not in config:
-        return True
-    
-    hass.async_create_task(
-        hass.config_entries.flow.async_init(
-            DOMAIN, context={"source": config_entries.SOURCE_IMPORT}
-        )
-    )
-
-    return True
-
-async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
     _LOGGER.info(f"The {__name__} component is ready!")
 
     if os.path.exists(PERSISTENCE):
@@ -193,7 +180,5 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
     hass.services.register(DOMAIN, "reset", handle_reset)
 
     # Return boolean to indicate that initialization was successful.
-
-    await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
 
     return True
