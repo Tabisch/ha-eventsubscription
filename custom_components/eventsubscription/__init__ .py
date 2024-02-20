@@ -7,10 +7,6 @@ import os
 
 import voluptuous as vol
 
-from homeassistant import config_entries
-from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import Platform
-from homeassistant.core import HomeAssistant
 from homeassistant.helpers.json import save_json
 
 from .const import (
@@ -37,11 +33,13 @@ async def async_setup(hass, config):
     _LOGGER.info(f"The {__name__} component is ready!")
 
     if os.path.exists(PERSISTENCE):
-        f = open(hass.config.path(PERSISTENCE))
+        f = open(PERSISTENCE)
 
         state = json.loads(f)
 
         f.close()
+    else:
+        save_json(PERSISTENCE, state)
 
     async def handle_register(call):
         """Handle the service call."""
@@ -91,7 +89,7 @@ async def async_setup(hass, config):
                     },
                 )
 
-        save_json(hass.config.path(PERSISTENCE), state)
+        save_json(PERSISTENCE, state)
 
     async def handle_complete(call):
         """Handle the service call."""
@@ -119,7 +117,7 @@ async def async_setup(hass, config):
         if flushregistration:
             del state[eventname]
 
-        save_json(hass.config.path(PERSISTENCE), state)
+        save_json(PERSISTENCE, state)
         
 
     async def handle_unregister(call):
@@ -162,7 +160,7 @@ async def async_setup(hass, config):
 
                 del state[eventname][user]
 
-        save_json(hass.config.path(PERSISTENCE), state)
+        save_json(PERSISTENCE, state)
 
     async def handle_reset(call):
         """Reset all notifications."""
@@ -172,7 +170,7 @@ async def async_setup(hass, config):
             "eventsubscription_reset"
         )
 
-        save_json(hass.config.path(PERSISTENCE), state)
+        save_json(PERSISTENCE, state)
 
     hass.services.register(DOMAIN, "complete", handle_complete)
     hass.services.register(DOMAIN, "register", handle_register)
