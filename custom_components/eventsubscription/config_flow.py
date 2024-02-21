@@ -9,8 +9,8 @@ from homeassistant.data_entry_flow import FlowResult
 from .const import DOMAIN
 
 
-class EventSubscriptionFlowHandler(ConfigFlow, domain=DOMAIN):
-    """Config flow for the shopping list integration."""
+class EventSubscriptionFlow(ConfigFlow, domain=DOMAIN):
+    """Config flow for the EventSubscription integration."""
 
     VERSION = 1
 
