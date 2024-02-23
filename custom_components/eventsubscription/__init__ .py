@@ -2,8 +2,6 @@
 from __future__ import annotations
 import logging
 
-import asyncio
-
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.typing import ConfigType
 from homeassistant.helpers.storage import Store
@@ -25,8 +23,7 @@ _LOGGER = logging.getLogger(__name__)
 state = {}
 storage = None
 
-@asyncio.coroutine
-def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
+def setup(hass: HomeAssistant, config: ConfigType) -> bool:
     _LOGGER.info(f"The {__name__} component is ready!")
 
     storage = Store(hass, version=1, key=DOMAIN)
