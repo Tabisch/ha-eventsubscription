@@ -1,14 +1,10 @@
 """The eventsubscription integration."""
 from __future__ import annotations
 import logging
-import json
-import os
 
 import voluptuous as vol
 
 from homeassistant.helpers.storage import Store
-from homeassistant.components.sensor import SensorEntity
-from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .const import (
     DOMAIN,
@@ -29,7 +25,7 @@ CONFIG_SCHEMA = vol.Schema({DOMAIN: {}}, extra=vol.ALLOW_EXTRA)
 state = {}
 storage = ""
 
-async def async_setup(hass, async_add_entities: AddEntitiesCallback):
+async def async_setup(hass, config):
     _LOGGER.info(f"The {__name__} component is ready!")
 
     storage = Store(hass, version=1, key=DOMAIN)
