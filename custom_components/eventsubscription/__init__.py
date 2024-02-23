@@ -166,9 +166,9 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
 
         storage.async_save(state)
 
-    hass.services.async_register(DOMAIN, "complete", handle_complete)
-    hass.services.async_register(DOMAIN, "register", handle_register)
-    hass.services.async_register(DOMAIN, "unregister", handle_unregister)
-    hass.services.async_register(DOMAIN, "reset", handle_reset)
+    await hass.services.async_register(DOMAIN, "complete", handle_complete)
+    await hass.services.async_register(DOMAIN, "register", handle_register)
+    await hass.services.async_register(DOMAIN, "unregister", handle_unregister)
+    await hass.services.async_register(DOMAIN, "reset", handle_reset)
 
     return True
