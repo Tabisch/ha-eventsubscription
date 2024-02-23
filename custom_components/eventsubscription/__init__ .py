@@ -167,6 +167,4 @@ def setup(hass, config) -> bool:
     hass.services.register(DOMAIN, "unregister", handle_unregister)
     hass.services.register(DOMAIN, "reset", handle_reset)
 
-    # Return boolean to indicate that initialization was successful.
-
     return True
