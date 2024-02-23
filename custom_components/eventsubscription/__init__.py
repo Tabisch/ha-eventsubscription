@@ -31,11 +31,11 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
 
     storage = Store(hass, version=1, key=DOMAIN)
 
-    state = storage.async_load()
+    state = await storage.async_load()
 
     _LOGGER.warning(f"state {state}")
 
-    async def handle_register(call):
+    def handle_register(call):
         """Handle the service call."""
         eventname = call.data.get(ATTR_EVENTNAME)
         registermessage = call.data.get(ATTR_REGISTERMESSAGE)
@@ -85,7 +85,7 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
 
         storage.async_save(state)
 
-    async def handle_complete(call):
+    def handle_complete(call):
         """Handle the service call."""
         eventname = call.data.get(ATTR_EVENTNAME)
         flushregistration = call.data.get(ATTR_FLUSHREGISTRATION)
@@ -114,7 +114,7 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
         storage.async_save(state)
         
 
-    async def handle_unregister(call):
+    def handle_unregister(call):
         """Handle the service call."""
         eventname = call.data.get(ATTR_EVENTNAME)
         targetperson = call.data.get(ATTR_TARGETPERSON)
@@ -156,7 +156,7 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
 
         storage.async_save(state)
 
-    async def handle_reset(call):
+    def handle_reset(call):
         """Reset all notifications."""
         state = {}
 
