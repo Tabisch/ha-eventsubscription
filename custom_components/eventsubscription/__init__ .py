@@ -2,9 +2,8 @@
 from __future__ import annotations
 import logging
 
-import voluptuous as vol
-
-from homeassistant.helpers.typing import ConfigType
+from homeassistant.config_entries import ConfigEntry
+from homeassistant.const import Platform, ATTR_NAME, ATTR_DEFAULT_NAME
 from homeassistant.helpers.storage import Store
 from homeassistant.core import HomeAssistant
 
@@ -23,16 +22,16 @@ from .const import (
 _LOGGER = logging.getLogger(__name__)
 
 state = {}
-storage = ""
+storage = None
 
-def setup(hass: HomeAssistant, config: ConfigType) -> bool:
+def setup(hass, config) -> bool:
     _LOGGER.info(f"The {__name__} component is ready!")
 
     storage = Store(hass, version=1, key=DOMAIN)
 
     state = storage.async_load()
 
-    async def handle_register(call):
+    def handle_register(call):
         """Handle the service call."""
         eventname = call.data.get(ATTR_EVENTNAME)
         registermessage = call.data.get(ATTR_REGISTERMESSAGE)
@@ -82,7 +81,7 @@ def setup(hass: HomeAssistant, config: ConfigType) -> bool:
 
         storage.async_save(state)
 
-    async def handle_complete(call):
+    def handle_complete(call):
         """Handle the service call."""
         eventname = call.data.get(ATTR_EVENTNAME)
         flushregistration = call.data.get(ATTR_FLUSHREGISTRATION)
@@ -111,7 +110,7 @@ def setup(hass: HomeAssistant, config: ConfigType) -> bool:
         storage.async_save(state)
         
 
-    async def handle_unregister(call):
+    def handle_unregister(call):
         """Handle the service call."""
         eventname = call.data.get(ATTR_EVENTNAME)
         targetperson = call.data.get(ATTR_TARGETPERSON)
@@ -153,7 +152,7 @@ def setup(hass: HomeAssistant, config: ConfigType) -> bool:
 
         storage.async_save(state)
 
-    async def handle_reset(call):
+    def handle_reset(call):
         """Reset all notifications."""
         state = {}
 
