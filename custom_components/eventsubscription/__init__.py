@@ -33,7 +33,10 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
 
     state = await storage.async_load()
 
-    _LOGGER.warning(f"state {state}")
+    if state is None:
+        state = {}
+        await storage.async_save(state)
+
 
     def handle_register(call):
         """Handle the service call."""
