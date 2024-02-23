@@ -6,7 +6,9 @@ import os
 
 import voluptuous as vol
 
-from homeassistant.helpers.json import save_json
+from homeassistant.helpers.storage import Store
+from homeassistant.components.sensor import SensorEntity
+from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .const import (
     DOMAIN,
@@ -24,21 +26,15 @@ _LOGGER = logging.getLogger(__name__)
 
 CONFIG_SCHEMA = vol.Schema({DOMAIN: {}}, extra=vol.ALLOW_EXTRA)
 
-PERSISTENCE = ".eventsubscription.json"
-
 state = {}
+storage = ""
 
-async def async_setup(hass, config):
+async def async_setup(hass, async_add_entities: AddEntitiesCallback):
     _LOGGER.info(f"The {__name__} component is ready!")
 
-    if os.path.exists(PERSISTENCE):
-        f = open(PERSISTENCE)
+    storage = Store(hass, version=1, key=DOMAIN)
 
-        state = json.loads(f)
-
-        f.close()
-    else:
-        save_json(PERSISTENCE, state)
+    state = storage.async_load()
 
     async def handle_register(call):
         """Handle the service call."""
@@ -88,7 +84,7 @@ async def async_setup(hass, config):
                     },
                 )
 
-        save_json(PERSISTENCE, state)
+        storage.async_save(state)
 
     async def handle_complete(call):
         """Handle the service call."""
@@ -116,7 +112,7 @@ async def async_setup(hass, config):
         if flushregistration:
             del state[eventname]
 
-        save_json(PERSISTENCE, state)
+        storage.async_save(state)
         
 
     async def handle_unregister(call):
@@ -159,7 +155,7 @@ async def async_setup(hass, config):
 
                 del state[eventname][user]
 
-        save_json(PERSISTENCE, state)
+        storage.async_save(state)
 
     async def handle_reset(call):
         """Reset all notifications."""
@@ -169,7 +165,7 @@ async def async_setup(hass, config):
             "eventsubscription_reset"
         )
 
-        save_json(PERSISTENCE, state)
+        storage.async_save(state)
 
     hass.services.register(DOMAIN, "complete", handle_complete)
     hass.services.register(DOMAIN, "register", handle_register)
