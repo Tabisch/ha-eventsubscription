@@ -3,6 +3,7 @@ from __future__ import annotations
 import logging
 
 from homeassistant.core import HomeAssistant
+import homeassistant.helpers.config_validation as cv
 from homeassistant.helpers.typing import ConfigType
 from homeassistant.helpers.storage import Store
 
@@ -17,6 +18,8 @@ from .const import (
     ATTR_FLUSHREGISTRATION,
     ATTR_UNREGISTERMESSAGE,
 )
+
+CONFIG_SCHEMA = cv.empty_config_schema(DOMAIN)
 
 _LOGGER = logging.getLogger(__name__)
 
