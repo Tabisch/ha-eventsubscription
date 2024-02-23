@@ -25,7 +25,7 @@ CONFIG_SCHEMA = vol.Schema({DOMAIN: {}}, extra=vol.ALLOW_EXTRA)
 state = {}
 storage = ""
 
-async def async_setup(hass, config):
+def setup(hass, config):
     _LOGGER.info(f"The {__name__} component is ready!")
 
     storage = Store(hass, version=1, key=DOMAIN)
