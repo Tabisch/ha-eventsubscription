@@ -4,15 +4,8 @@
   "codeowners": [
     "@tabisch"
   ],
-  "config_flow": false,
-  "dependencies": [],
   "documentation": "https://github.com/Tabisch/ha-eventsubscription",
-  "homekit": {},
-  "integration_type": "helper",
   "iot_class": "assumed_state",
-  "requirements": [],
-  "ssdp": [],
-  "zeroconf": [],
   "issue_tracker": "https://github.com/Tabisch/ha-eventsubscription",
-  "version": "1.0.0"
+  "version": "0.2"
 }

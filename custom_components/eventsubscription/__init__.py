@@ -1,12 +1,11 @@
 """The eventsubscription integration."""
 from __future__ import annotations
 import logging
-import json
-import time
 
-from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import Platform, ATTR_NAME, ATTR_DEFAULT_NAME
 from homeassistant.core import HomeAssistant
+import homeassistant.helpers.config_validation as cv
+from homeassistant.helpers.typing import ConfigType
+from homeassistant.helpers.storage import Store
 
 from .const import (
     DOMAIN,
@@ -20,15 +19,26 @@ from .const import (
     ATTR_UNREGISTERMESSAGE,
 )
 
+CONFIG_SCHEMA = cv.empty_config_schema(DOMAIN)
+
 _LOGGER = logging.getLogger(__name__)
 
 state = {}
+storage = None
 
-
-def setup(hass, config):
+async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
     _LOGGER.info(f"The {__name__} component is ready!")
 
-    def handle_register(call):
+    storage = Store(hass, version=1, key=DOMAIN)
+
+    state = await storage.async_load()
+
+    if state is None:
+        state = {}
+        await storage.async_save(state)
+
+
+    async def handle_register(call):
         """Handle the service call."""
         eventname = call.data.get(ATTR_EVENTNAME)
         registermessage = call.data.get(ATTR_REGISTERMESSAGE)
@@ -76,7 +86,9 @@ def setup(hass, config):
                     },
                 )
 
-    def handle_complete(call):
+        await storage.async_save(state)
+
+    async def handle_complete(call):
         """Handle the service call."""
         eventname = call.data.get(ATTR_EVENTNAME)
         flushregistration = call.data.get(ATTR_FLUSHREGISTRATION)
@@ -102,7 +114,10 @@ def setup(hass, config):
         if flushregistration:
             del state[eventname]
 
-    def handle_unregister(call):
+        await storage.async_save(state)
+        
+
+    async def handle_unregister(call):
         """Handle the service call."""
         eventname = call.data.get(ATTR_EVENTNAME)
         targetperson = call.data.get(ATTR_TARGETPERSON)
@@ -142,7 +157,9 @@ def setup(hass, config):
 
                 del state[eventname][user]
 
-    def handle_reset(call):
+        await storage.async_save(state)
+
+    async def handle_reset(call):
         """Reset all notifications."""
         state = {}
 
@@ -150,10 +167,11 @@ def setup(hass, config):
             "eventsubscription_reset"
         )
 
-    hass.services.register(DOMAIN, "complete", handle_complete)
-    hass.services.register(DOMAIN, "register", handle_register)
-    hass.services.register(DOMAIN, "unregister", handle_unregister)
-    hass.services.register(DOMAIN, "reset", handle_reset)
+        await storage.async_save(state)
 
-    # Return boolean to indicate that initialization was successful.
+    hass.services.async_register(DOMAIN, "complete", handle_complete)
+    hass.services.async_register(DOMAIN, "register", handle_register)
+    hass.services.async_register(DOMAIN, "unregister", handle_unregister)
+    hass.services.async_register(DOMAIN, "reset", handle_reset)
+
     return True
