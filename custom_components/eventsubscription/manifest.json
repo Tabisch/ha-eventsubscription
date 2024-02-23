@@ -8,7 +8,7 @@
   "dependencies": [],
   "documentation": "https://github.com/Tabisch/ha-eventsubscription",
   "homekit": {},
-  "integration_type": "local_push",
+  "integration_type": "helper",
   "iot_class": "assumed_state",
   "requirements": [],
   "ssdp": [],

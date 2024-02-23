@@ -4,8 +4,8 @@ import logging
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import Platform, ATTR_NAME, ATTR_DEFAULT_NAME
-from homeassistant.helpers.storage import Store
 from homeassistant.core import HomeAssistant
+from homeassistant.helpers.storage import Store
 
 from .const import (
     DOMAIN,
