@@ -4,7 +4,9 @@ import logging
 
 import voluptuous as vol
 
+from homeassistant.helpers.typing import ConfigType
 from homeassistant.helpers.storage import Store
+from homeassistant.core import HomeAssistant
 
 from .const import (
     DOMAIN,
@@ -20,12 +22,10 @@ from .const import (
 
 _LOGGER = logging.getLogger(__name__)
 
-CONFIG_SCHEMA = vol.Schema({DOMAIN: {}}, extra=vol.ALLOW_EXTRA)
-
 state = {}
 storage = ""
 
-def setup(hass, config):
+def setup(hass: HomeAssistant, config: ConfigType) -> bool:
     _LOGGER.info(f"The {__name__} component is ready!")
 
     storage = Store(hass, version=1, key=DOMAIN)
