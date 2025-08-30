@@ -42,8 +42,7 @@ class EventSubscriptionSensor(SensorEntity, CoordinatorEntity):
         self._name = f"{entry.data[ATTR_EVENTNAME]}"
         self._attributename = entry.data[ATTR_EVENTNAME]
 
-        self._state = 0
-        self._available = False
+        self._available = True
 
         self._eventName = entry.data[ATTR_EVENTNAME]
         self._deleteAfterCompletion = entry.data[ATTR_DELETEAFTERCOMPLETION]
@@ -52,6 +51,11 @@ class EventSubscriptionSensor(SensorEntity, CoordinatorEntity):
             "last_update": "",
             "last_update_diff": "",
         }
+
+        if self._eventName not in coordinator.data.keys():
+            coordinator.data[self._eventName] = []
+
+        self._state = len(coordinator.data[self._eventName])
 
         _LOGGER.debug(f"EventSubscriptionSensor - {self._name} created")
 
@@ -92,8 +96,6 @@ class EventSubscriptionSensor(SensorEntity, CoordinatorEntity):
         _LOGGER.debug(
             f"EventSubscriptionSensor - {self._name} - {len(self.coordinator.data[self._name])}"
         )
-
-        self._available = True
 
         self._state = len(self.coordinator.data[self._name])
 
