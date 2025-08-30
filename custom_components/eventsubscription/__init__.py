@@ -41,6 +41,21 @@ async def async_setup(hass: HomeAssistant, config: ConfigEntry) -> bool:
     global coordinatorEntity
     coordinatorEntity = EventSubscriptionCoordinator(hass=hass)
 
+    if coordinatorEntity.data is None:
+        coordinatorEntity.data = await coordinatorEntity._storage.async_load()
+
+        if coordinatorEntity.data is None:
+            coordinatorEntity.data = {}
+
+        eventsEntries = coordinatorEntity.hass.config_entries.async_entries(
+            "eventsubscription"
+        )
+        for entry in eventsEntries:
+            if entry.data["eventname"] not in coordinatorEntity.data.keys():
+                coordinatorEntity.data[entry.data["eventname"]] = []
+
+        _LOGGER.debug("EventSubscriptionCoordinator data loaded")
+
     return True
 
 

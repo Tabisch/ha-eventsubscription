@@ -1,12 +1,11 @@
 # Event Subscription
 
-Automation Template for Subscribing a User that has pressed a button or scanned a nfc tag \
-Refernce automationTemplateCurrentUser file to get a yaml that will always return the name of the user executing the automation
+Integration for that gives users the ability to subscribe to specific events and get notfied then they are complete.
 
-For publishing messages to user reference the automationMessagePublisher file \
-There is the full setup i use at the moment \
-Please make sure to include the mode: parallel and set max: to atleast the number of users in your home assistant instance \
-For every user one event will be fired and if that number is to low, the user will not be notified
+This integration has https://github.com/Tabisch/ha-person-notify as a prerequisite. \
+If you do fulfill that prerequisite, this integration will not work.
 
-The whole integration does not persist data at the moment. \
-I want to do that, but i havent found a way persist a json object in home assistant.
+### Note
+This integration is very early development, if you can even call it that. \
+I just build what i needed for now. \
+If you have any ideas or find any bugs, just open an issue.

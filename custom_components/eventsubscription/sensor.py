@@ -92,6 +92,7 @@ class EventSubscriptionSensor(SensorEntity, CoordinatorEntity):
         _LOGGER.debug(
             f"EventSubscriptionSensor - {self._name} - {len(self.coordinator.data[self._name])}"
         )
+
         self._available = True
 
         self._state = len(self.coordinator.data[self._name])

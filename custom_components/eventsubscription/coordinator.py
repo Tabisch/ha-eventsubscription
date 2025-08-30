@@ -91,10 +91,6 @@ class EventSubscriptionCoordinator(DataUpdateCoordinator):
     async def _async_update_data(self):
         _LOGGER.debug("EventSubscriptionCoordinator updating")
 
-        if self.data is None:
-            self.data = await self._storage.async_load()
-            _LOGGER.debug("EventSubscriptionCoordinator data loaded")
-
         return self.data
 
     async def sendMessage(self, userids, message):
