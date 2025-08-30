@@ -1,102 +1,22 @@
-register:
-  name: Register
-  description: Register a eventsubscription.
+subscribe:
+  name: Subscribe
+  desciption: "Subscribe a specific user to an event"
   fields:
-    eventname:
-      name: Eventname
-      description: Name of the event
-      required: true
-      example: custom_event
-      selector:
-        text:
     targetPerson:
-      name: Target
-      description: Target
-      required: false
+      name: Person(s)
+      description: Person that should be subscribed
+      required: true
       selector:
         entity:
           multiple: true
           filter:
             - domain: person
-    targetText:
-      name: TargetText
-      description: TargetText
-      required: false
-      selector:
-        template:
-    registermessage:
-      name: RegisterMessage
-      description: Message for registering
-      required: false
-      example: EventSubscription registered
-      selector:
-        text:
-    completemessage:
-      name: CompleteMessage
-      description: Message for completing
-      required: false
-      example: Event completed
-      selector:
-        text:
-    unregistermessage:
-      name: UnregisterMessage
-      description: Message for unregistering
-      required: false
-      example: EventSubscription unregistered
-      selector:
-        text:
-    deleteaftercompletion:
-      name: Delete
-      description: Delete current Registration to this event
+    targetEvent:
+      name: Event
+      description: Event the person(s) should be subscribed to
       required: true
-      selector:
-        boolean:
-
-complete:
-  name: Complete
-  description: Complete a eventsubscription.
-  fields:
-    eventname:
-      name: Eventname
-      description: Name of the event
-      required: true
-      example: custom_event
-      selector:
-        text:
-    flushregistration:
-      name: Registration flush
-      description: Flush all Registrations to this event
-      required: true
-      selector:
-        boolean:
-
-unregister:
-  name: Unregister
-  description: Unregister a eventsubscription.
-  fields:
-    eventname:
-      name: Eventname
-      description: Name of the event
-      required: true
-      example: custom_event
-      selector:
-        text:
-    targetPerson:
-      name: Target
-      description: Target
-      required: false
       selector:
         entity:
-          multiple: true
+          multiple: false
           filter:
-            - domain: person
-    targetText:
-      name: TargetText
-      description: TargetText
-      required: false
-      selector:
-        template:
-
-reset:
-  name: Reset
-  description: Delete all notification registrations
+            - domain: eventsubscription

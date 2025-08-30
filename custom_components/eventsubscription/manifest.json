@@ -7,5 +7,6 @@
   "documentation": "https://github.com/Tabisch/ha-eventsubscription",
   "iot_class": "assumed_state",
   "issue_tracker": "https://github.com/Tabisch/ha-eventsubscription",
+  "config_flow": true,
   "version": "0.2"
 }
