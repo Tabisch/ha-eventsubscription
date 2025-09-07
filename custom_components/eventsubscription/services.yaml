@@ -1,4 +1,4 @@
-subscribe:
+subscribe_specific:
   name: Subscribe
   desciption: "Subscribe a specific user to an event"
   fields:
@@ -19,4 +19,23 @@ subscribe:
         entity:
           multiple: false
           filter:
-            - domain: eventsubscription
+            - domain: sensor
+              integration: eventsubscription
+
+subscribe_dynamic:
+  name: Subscribe
+  desciption: "Subscribe user from context to an event"
+  fields:
+#    targetPerson:
+#      selector:
+#        template: #"{% if trigger.event is defined %}{{trigger.event.context.user_id}}{%endif %}{% if trigger.to_state is defined %}{{trigger.to_state.context.user_id}}{% endif %}"
+    targetEvent:
+      name: Event
+      description: Event the person(s) should be subscribed to
+      required: true
+      selector:
+        entity:
+          multiple: false
+          filter:
+            - domain: sensor
+              integration: eventsubscription

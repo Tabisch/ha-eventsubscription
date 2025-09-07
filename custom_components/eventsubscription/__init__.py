@@ -7,7 +7,6 @@ from homeassistant.core import HomeAssistant, ServiceCall
 import homeassistant.helpers.config_validation as cv
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import Platform
-from homeassistant.components.person import Person
 
 from .coordinator import EventSubscriptionCoordinator
 
@@ -29,7 +28,7 @@ async def async_setup(hass: HomeAssistant, config: ConfigEntry) -> bool:
     person_notify_entities = []
 
     for entry in notify_entries:
-        if entry.source == "ha-person-notify":
+        if entry.source == "personnotify":
             person_notify_entities.append(entry)
 
     if len(person_notify_entities) == 0:
@@ -46,6 +45,30 @@ async def async_setup(hass: HomeAssistant, config: ConfigEntry) -> bool:
 
         if coordinatorEntity.data is None:
             coordinatorEntity.data = {}
+
+    def handle_subscribe_specific(call):
+        print(call)
+
+    async def handle_subscribe_dynamic(call: ServiceCall):
+        print(call.context.as_dict())
+        print(call.data)
+
+        event = call.data["targetEvent"].split(".")[1]
+        _LOGGER.debug(f"Subscribing {call.context.user_id} to {event}")
+        await coordinatorEntity.changeState(
+            eventdata={
+                "eventName": event,
+                "action": "register",
+                "userid": call.context.user_id,
+                "deleteAfterCompletion": False,
+                "message": "",
+            }
+        )
+
+    hass.services.async_register(
+        DOMAIN, "subscribe_specific", handle_subscribe_specific
+    )
+    hass.services.async_register(DOMAIN, "subscribe_dynamic", handle_subscribe_dynamic)
 
     return True
 
