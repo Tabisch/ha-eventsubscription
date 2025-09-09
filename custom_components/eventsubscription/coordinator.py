@@ -9,7 +9,7 @@ from homeassistant.helpers.update_coordinator import (
 
 from homeassistant.helpers.storage import Store
 
-from .const import DOMAIN
+from .const import DOMAIN, PERSONNOTIFY_DOMAIN
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -32,8 +32,37 @@ class EventSubscriptionCoordinator(DataUpdateCoordinator):
 
         _LOGGER.debug("EventSubscriptionCoordinator created")
 
-    async def changeState(self, eventdata):
+    async def changeState(
+        self, eventdata, sendMessage: bool = True, customMessage: bool = False
+    ):
         _LOGGER.debug("EventSubscriptionCoordinator change setting")
+
+        event_entries = self.hass.config_entries.async_entries(domain=DOMAIN)
+        deleteAfterCompletion = False
+
+        entrydata = None
+
+        for event_entry in event_entries:
+            if (
+                event_entry.domain == DOMAIN
+                and event_entry.data["eventname"] == eventdata["eventName"]
+            ):
+                entrydata = event_entry.data
+                break
+
+        if entrydata == None:
+            _LOGGER.debug("Eventsubscribtion entry not found")
+            return
+
+        deleteAfterCompletion = entrydata["deleteaftercompletion"]
+
+        message = ""
+
+        if customMessage:
+            message = eventdata["message"]
+        else:
+            if eventdata["action"] != "reset":
+                message = entrydata[f"{eventdata['action']}message"]
 
         # prepare set
         setdata = set()
@@ -42,17 +71,16 @@ class EventSubscriptionCoordinator(DataUpdateCoordinator):
             setdata = set(self.data[eventdata["eventName"]])
 
         if eventdata["action"] == "complete":
-            """complete path"""
             _LOGGER.debug(
                 f"EventSubscriptionCoordinator complete {eventdata['eventName']}"
             )
-            await self.sendMessage(userids=list(setdata), message=eventdata["message"])
+            if sendMessage:
+                await self.sendMessage(userids=list(setdata), message=message)
 
-            if eventdata["deleteAfterCompletion"]:
+            if deleteAfterCompletion:
                 setdata.clear()
 
         if eventdata["action"] == "reset":
-            """reset path"""
             _LOGGER.debug(
                 f"EventSubscriptionCoordinator reset {eventdata['eventName']}"
             )
@@ -60,24 +88,20 @@ class EventSubscriptionCoordinator(DataUpdateCoordinator):
 
         # update set
         if eventdata["action"] == "register":
-            """register path"""
             _LOGGER.debug(
                 f"EventSubscriptionCoordinator register {eventdata['eventName']}"
             )
             setdata.add(eventdata["userid"])
 
-            await self.sendMessage(
-                userids=[eventdata["userid"]], message=eventdata["message"]
-            )
+            if sendMessage:
+                await self.sendMessage(userids=[eventdata["userid"]], message=message)
 
         if eventdata["action"] == "unregister":
-            """unregister path"""
             _LOGGER.debug(
                 f"EventSubscriptionCoordinator unregister {eventdata['eventName']}"
             )
-            await self.sendMessage(
-                userids=[eventdata["userid"]], message=eventdata["message"]
-            )
+            if sendMessage:
+                await self.sendMessage(userids=[eventdata["userid"]], message=message)
 
             setdata.discard(eventdata["userid"])
 
@@ -99,7 +123,7 @@ class EventSubscriptionCoordinator(DataUpdateCoordinator):
         person_notify_entities = []
 
         for entry in notify_entries:
-            if entry.source == "ha-person-notify":
+            if entry.source == PERSONNOTIFY_DOMAIN:
                 person_notify_entities.append(entry)
 
         for userid in userids:

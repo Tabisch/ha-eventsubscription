@@ -1,4 +1,4 @@
-subscribe_specific:
+user_specific:
   name: Subscribe
   desciption: "Subscribe a specific user to an event"
   fields:
@@ -21,14 +21,32 @@ subscribe_specific:
           filter:
             - domain: sensor
               integration: eventsubscription
+    action:
+      name: Action
+      description: Action to be done
+      required: true
+      selector:
+        select:
+          options:
+            - "register"
+            - "unregister"
+    suppressMessage:
+      name: Suppress message
+      description: No not send message when subscribing user
+      required: true
+      selector:
+        boolean:
+    customMessage:
+      name: Custom message
+      description: Message to send
+      required: false
+      selector:
+        text:
 
-subscribe_dynamic:
-  name: Subscribe
-  desciption: "Subscribe user from context to an event"
+user_dynamic:
+  name: Do dynamic
+  desciption: Get user from context
   fields:
-#    targetPerson:
-#      selector:
-#        template: #"{% if trigger.event is defined %}{{trigger.event.context.user_id}}{%endif %}{% if trigger.to_state is defined %}{{trigger.to_state.context.user_id}}{% endif %}"
     targetEvent:
       name: Event
       description: Event the person(s) should be subscribed to
@@ -39,3 +57,60 @@ subscribe_dynamic:
           filter:
             - domain: sensor
               integration: eventsubscription
+    action:
+      name: Action
+      description: Action to be done
+      required: true
+      selector:
+        select:
+          options:
+            - "register"
+            - "unregister"
+    suppressMessage:
+      name: Suppress message
+      description: No not send message when subscribing user
+      required: true
+      selector:
+        boolean:
+    customMessage:
+      name: Custom message
+      description: Message to send
+      required: false
+      selector:
+        text:
+
+reset:
+  name: Reset
+  desciption: Reset all users subscribed
+  fields:
+    targetEvent:
+      name: Event
+      description: Event that should be reset
+      required: true
+      selector:
+        entity:
+          multiple: false
+          filter:
+            - domain: sensor
+              integration: eventsubscription
+
+complete:
+  name: Complete
+  desciption: Notify all users subscribed
+  fields:
+    targetEvent:
+      name: Event
+      description: Event that completed
+      required: true
+      selector:
+        entity:
+          multiple: false
+          filter:
+            - domain: sensor
+              integration: eventsubscription
+    customMessage:
+      name: Custom message
+      description: Message to send
+      required: false
+      selector:
+        text:

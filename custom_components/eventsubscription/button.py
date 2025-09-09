@@ -6,6 +6,8 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.components.button import ButtonEntity
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
+from hawhodid import WhoDid
+
 from .const import *
 
 _LOGGER = logging.getLogger(__name__)
@@ -64,8 +66,6 @@ class EventSubscriptionButton(ButtonEntity, CoordinatorEntity):
 
         self._eventName = entry.data[ATTR_EVENTNAME]
         self._action = action
-        self._actionMessage = message
-        self._deleteAfterCompletion = entry.data[ATTR_DELETEAFTERCOMPLETION]
 
         self.attrs: Dict[str, Any] = {
             "last_update": "",
@@ -74,15 +74,21 @@ class EventSubscriptionButton(ButtonEntity, CoordinatorEntity):
 
     async def async_press(self) -> None:
         """Handle the button press."""
-        _LOGGER.debug(f"{self._eventName} {self._context.user_id}")
+
+        whodidInstance = WhoDid(hass=self.hass)
+
+        userid = await whodidInstance.getUserId(context=self._context)
+
+        if userid == None:
+            return
+
+        _LOGGER.debug(f"{self._eventName} {userid}")
 
         await self.coordinator.changeState(
             eventdata={
                 "eventName": self._eventName,
                 "action": self._action,
-                "userid": self._context.user_id,
-                "deleteAfterCompletion": self._deleteAfterCompletion,
-                "message": self._actionMessage,
+                "userid": userid,
             }
         )
 
@@ -90,6 +96,10 @@ class EventSubscriptionButton(ButtonEntity, CoordinatorEntity):
 
     @property
     def unique_id(self) -> str:
+        return self._name
+
+    @property
+    def name(self) -> str:
         return self._name
 
     @property
