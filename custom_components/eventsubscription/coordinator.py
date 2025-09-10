@@ -15,8 +15,6 @@ _LOGGER = logging.getLogger(__name__)
 
 
 class EventSubscriptionCoordinator(DataUpdateCoordinator):
-    """My custom coordinator."""
-
     def __init__(self, hass: HomeAssistant):
         """Initialize coordinator."""
         super().__init__(
@@ -87,18 +85,18 @@ class EventSubscriptionCoordinator(DataUpdateCoordinator):
             setdata.clear()
 
         # update set
-        if eventdata["action"] == "register":
+        if eventdata["action"] == "subscribe":
             _LOGGER.debug(
-                f"EventSubscriptionCoordinator register {eventdata['eventName']}"
+                f"EventSubscriptionCoordinator subscribe {eventdata['eventName']}"
             )
             setdata.add(eventdata["userid"])
 
             if sendMessage:
                 await self.sendMessage(userids=[eventdata["userid"]], message=message)
 
-        if eventdata["action"] == "unregister":
+        if eventdata["action"] == "unsubscribe":
             _LOGGER.debug(
-                f"EventSubscriptionCoordinator unregister {eventdata['eventName']}"
+                f"EventSubscriptionCoordinator unsubscribe {eventdata['eventName']}"
             )
             if sendMessage:
                 await self.sendMessage(userids=[eventdata["userid"]], message=message)

@@ -28,8 +28,8 @@ user_specific:
       selector:
         select:
           options:
-            - "register"
-            - "unregister"
+            - "subscribe"
+            - "unsubscribe"
     suppressMessage:
       name: Suppress message
       description: No not send message when subscribing user
@@ -64,8 +64,8 @@ user_dynamic:
       selector:
         select:
           options:
-            - "register"
-            - "unregister"
+            - "subscribe"
+            - "unsubscribe"
     suppressMessage:
       name: Suppress message
       description: No not send message when subscribing user

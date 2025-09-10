@@ -19,28 +19,16 @@ async def async_setup_entry(
     async_add_entities(
         [
             EventSubscriptionButton(
-                entry=entry,
-                action="register",
-                coordinator=entry.runtime_data,
-                message=entry.data["registermessage"],
+                entry=entry, action="subscribe", coordinator=entry.runtime_data
             ),
             EventSubscriptionButton(
-                entry=entry,
-                action="unregister",
-                coordinator=entry.runtime_data,
-                message=entry.data["unregistermessage"],
+                entry=entry, action="unsubscribe", coordinator=entry.runtime_data
             ),
             EventSubscriptionButton(
-                entry=entry,
-                action="complete",
-                coordinator=entry.runtime_data,
-                message=entry.data["completemessage"],
+                entry=entry, action="complete", coordinator=entry.runtime_data
             ),
             EventSubscriptionButton(
-                entry=entry,
-                action="reset",
-                coordinator=entry.runtime_data,
-                message="",
+                entry=entry, action="reset", coordinator=entry.runtime_data
             ),
         ],
         update_before_add=True,
@@ -54,7 +42,6 @@ class EventSubscriptionButton(ButtonEntity, CoordinatorEntity):
         self,
         entry: ConfigEntry,
         action: str,
-        message: str,
         coordinator: CoordinatorEntity,
     ) -> None:
         super().__init__(coordinator=coordinator)

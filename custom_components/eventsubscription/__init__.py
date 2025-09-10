@@ -27,7 +27,7 @@ coordinatorEntity = None
 
 
 async def async_setup(hass: HomeAssistant, config: ConfigEntry) -> bool:
-    """Set up RemoteNow from a config entry."""
+    """Set up eventsubscription from a config entry."""
     notify_entries = hass.config_entries.async_entries(domain="group")
     person_notify_entities = []
 
@@ -149,7 +149,7 @@ async def async_setup(hass: HomeAssistant, config: ConfigEntry) -> bool:
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
-    """Set up RemoteNow from a config entry."""
+    """Set up eventsubscription from a config entry."""
 
     entry.runtime_data = coordinatorEntity
 

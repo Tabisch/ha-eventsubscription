@@ -45,7 +45,6 @@ class EventSubscriptionSensor(SensorEntity, CoordinatorEntity):
         self._available = True
 
         self._eventName = entry.data[ATTR_EVENTNAME]
-        self._deleteAfterCompletion = entry.data[ATTR_DELETEAFTERCOMPLETION]
 
         self.attrs: Dict[str, Any] = {
             "last_update": "",
