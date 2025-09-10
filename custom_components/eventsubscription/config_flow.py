@@ -20,16 +20,16 @@ _LOGGER = logging.getLogger(__name__)
 STEP_USER_DATA_SCHEMA = vol.Schema(
     {
         vol.Required(ATTR_EVENTNAME): str,
-        vol.Required(ATTR_REGISTERMESSAGE): str,
+        vol.Required(ATTR_SUBSCRIBEMESSAGE): str,
         vol.Required(ATTR_COMPLETEMESSAGE): str,
-        vol.Required(ATTR_UNREGISTERMESSAGE): str,
+        vol.Required(ATTR_UNSUBSCRIBEMESSAGE): str,
         vol.Required(ATTR_DELETEAFTERCOMPLETION): bool,
     }
 )
 
 
 class RemoteNowFlow(ConfigFlow, domain=DOMAIN):
-    """Handle a config flow for RemoteNow."""
+    """Handle a config flow for eventsubscription."""
 
     VERSION = 1
 
